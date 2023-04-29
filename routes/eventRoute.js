@@ -1,20 +1,28 @@
 const express = require("express");
 const authPathak = require("../middlewares/authPathak");
+const authEvent = require("../middlewares/authEvent");
 const eventController = require("../controllers/eventController");
 
 const router = new express.Router();
 
-// get event
-router.get("/event/deatils/:eventId", authPathak, eventController.get_event);
-
 // add event
-router.post("/event/add", authPathak, eventController.add_event);
+// Code - Done
+// Testing - Done
+router.post("/event/add", authEvent, eventController.add_event);
+
+// get event
+// Code - Done
+// Testing - Done
+router.get("/event/details/:eventId", authEvent, eventController.get_event);
 
 // update event
-router.post("/event/update", authPathak, eventController.update_event);
+// Code - Done
+// Testing - Done
+router.patch("/event/update/:eventId", authEvent, eventController.update_event);
 
 // delete event
-router.delete("/event/delete/:eventId", authPathak, eventController.delete_event);
-
+// Code - Done
+// Testing - Done
+router.delete("/event/delete/:eventId", authEvent, eventController.delete_event);
 
 module.exports = router;

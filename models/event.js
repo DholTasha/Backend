@@ -6,15 +6,13 @@ const { isEmail } = require("validator");
 
 const eventSchema = new mongoose.Schema(
     {
-
-
-        location: {
-            type:string,
-            required: true
-        },
         name: {
             type:String,
             required:true
+        },
+        location: {
+            type:String,
+            required: true
         },
         maleDhol: {
             type:Number,
@@ -35,8 +33,17 @@ const eventSchema = new mongoose.Schema(
         videoLink: {
             type: String,
             required: true
-        }
-        
+        },
+        pathakId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Pathak",
+        },
+        // customerId: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     required: true,
+        //     ref: "Customer",
+        // }
     }
 )
 

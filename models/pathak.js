@@ -6,43 +6,35 @@ const jwt = require("jsonwebtoken");
 
 const pathakSchema = new mongoose.Schema(
     {
-      email: {
+        name: {
+            type: String,
+            required: true
+        },
+        email: {
             type: String,
             required: true,
             unique: true, //as email needs to be unique
             validate: [isEmail, "Please enter a valid email"],
-      },    
-        
-        name: {
-            type:String,
-            required:true
         },
-
         maleDhol: {
-            type:Number,
+            type: Number,
             required: true
         },
 
         maleTasha: {
-            type:Number,
+            type: Number,
             required: true
         },
 
         femaleDhol: {
-            type:Number,
+            type: Number,
             required: true
         },
 
         femaleTasha: {
-            type:Number,
+            type: Number,
             required: true
         },
-
-
-        // contact: {
-           
-        // },
-
         address: {
             type: String,
             required: true
@@ -56,27 +48,47 @@ const pathakSchema = new mongoose.Schema(
             type: String,
             required: true,
             minlength: 6,
-          },
+        },
 
 
         mobile: {
             type: Number,
             required: true,
-            unique: true
         },
 
         numberOfEvents: {
-          type: Number,
-          required: true
+            type: Number,
+            default: 0
         },
-        
-          //new fields :
-          resetPasswordToken: String,
-          resetPasswordExpire: Date,
-          resetPasswordTokenForForgotPassword: String,
-        
+
+        //new fields :
+        resetPasswordToken: String,
+        resetPasswordExpire: Date,
+        resetPasswordTokenForForgotPassword: String,
+
     }
-)
+);
+
+pathakSchema.pre("save", async function (next) {
+    if (this.isModified("password")) {
+        const salt = await bcrypt.genSalt();
+        this.password = await bcrypt.hash(this.password, salt);
+    }
+    next();
+});
+
+// login pathak
+pathakSchema.statics.login = async function (email, password) {
+    const pathak = await this.findOne({ email });
+    if (pathak) {
+        const auth = await bcrypt.compare(password, pathak.password);
+        if (auth) {
+            return pathak;
+        }
+        throw Error("Incorrect Password");
+    }
+    throw Error("Incorrect Email");
+};
 
 const Pathak = mongoose.model("Pathak", pathakSchema);
 

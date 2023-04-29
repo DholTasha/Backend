@@ -1,53 +1,56 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
-const Joi = require("joi");
-const jwt = require("jsonwebtoken");
 
-const customerSchema = new mongoose.Schema(
-    {
-        email: {
-            type: String,
-            required: true,
-            unique: true, //as email needs to be unique
-            validate: [isEmail, "Please enter a valid email"],
-          },
-        
-        username: {
-            type: String,
-            required: true,
-            unique: true
-          },
-    
-        password: {
-            type: String,
-            required: true,
-            minlength: 6,
-          },
+const customerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+      type: String,
+      required: true,
+      unique: true, //as email needs to be unique
+      validate: [isEmail, "Please enter a valid email"],
+  },
+  password: {
+      type: String,
+      required: true,
+      minlength: 6,
+  },
+  mobile: {
+      type: Number,
+      required: true,
+  },
+  numberOfEvents: {
+    type: Number,
+    default: 0
+  },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    resetPasswordTokenForForgotPassword: String,
+});
 
-        name: {
-            type:String,
-            required:true
-        },
+customerSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
 
-        mobile: {
-            type: Number,
-            required: true,
-            unique: true
-        },
-
-        numberOfEvents: {
-          type: Number,
-          required: true
-        },
-      
-          //new fields :
-          resetPasswordToken: String,
-          resetPasswordExpire: Date,
-          resetPasswordTokenForForgotPassword: String,
-        
+// login customer
+customerSchema.statics.login = async function (email, password) {
+  const customer = await this.findOne({ email });
+  if (customer) {
+    const auth = await bcrypt.compare(password, customer.password);
+    if (auth) {
+      return customer;
     }
-)
+    throw Error("Incorrect Password");
+  }
+  throw Error("Incorrect Email");
+};
 
 const Customer = mongoose.model("Customer", customerSchema);
 

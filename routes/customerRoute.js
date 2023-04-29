@@ -5,42 +5,63 @@ const customerController = require("../controllers/customerController");
 const router = new express.Router();
 
 // signup customer
+// Code - Done
+// Testing - Done
 router.post("/customer/signup", customerController.signup_customer);
 
 // login customer
+// Code - Done
+// Testing - Done
 router.post("/customer/login", customerController.login_customer);
 
 // logout customer
+// Code - Done
+// Testing - Done
 router.post("/customer/logout", authCustomer, customerController.logout_customer);
 
 // read customer
+// Code - Done
+// Testing - Done
 router.get("/customer/me", authCustomer, customerController.customer_profile);
 
 // update customer
-router.post("/customer/update", authCustomer, customerController.customer_update);
+// Code - Done
+// Testing - Done
+router.patch("/customer/me", authCustomer, customerController.customer_update);
 
 // delete customer
-router.delete("/customer/delete", authCustomer, customerController.customer_delete);
+// Code - Done
+// Testing - Done
+router.delete("/customer/me", authCustomer, customerController.customer_delete);
 
-// get Currently On Going Company Jobs,
-router.get("/customer/pathak", customerController.pathak);
+// get all pathaks
+// Code - Done
+// Testing - Done
+router.get("/customer/pathak/all", customerController.get_all_pathak);
 
 // company details,
-router.get("/customer/pathak/:pathakId", authCustomer, customerController.pathak_details);
+// Code - Done
+// Testing - Done
+router.get("/customer/pathak/:pathakId", customerController.pathak_profile);
 
-// get all pathak events
-router.get("/customer/pathak/events/:pathakId", authPathak, pathakController.get_all_pathak_events);
-
-// customerApplyForCompanies later - companyid take from req.body._id
-router.post("/customer/pathak/event/:pathakId", authCustomer, customerController.pathak_event_details);
+// get pathak events
+// Code - Done
+// Testing - Done
+router.get("/customer/pathak/events/:pathakId", authCustomer, customerController.get_pathak_events);
 
 // update customer password
-router.post("/customer/password/update", authCustomer, customerController.customer_update_password);
+// Code - Incomplete
+// Testing - Incomplete
+// router.post("/customer/password/update", authCustomer, customerController.customer_update_password);
 
 // reset customer password
-router.post("/customer/password/reset", customerController.customer_reset_password);
+// Code - Incomplete
+// Testing - Incomplete
+// router.post("/customer/password/reset", customerController.customer_reset_password);
 
 // forgot passwords
-router.post("/customer/password/forgot", customerController.customer_forgot_password);
+// Code - Incomplete
+// Testing - Incomplete
+// router.post("/customer/password/forgot", customerController.customer_forgot_password);
 
 module.exports = router;
