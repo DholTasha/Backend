@@ -4,7 +4,7 @@ const Event = require("../models/event.js");
 module.exports.add_event = async (req, res) => {
   try {
     await Event.create(req.event);
-    req.pathak.numberOfEvents++;
+    req.team.numberOfEvents++;
     res.status(201).json({ success: true, message: "Event Added Successfully." });
   } catch (err) {
     res.status(400).json({success: false, errors: err, message: "Error while adding event."});
@@ -15,7 +15,7 @@ module.exports.add_event = async (req, res) => {
 module.exports.update_event = async (req, res) => {
   const updates = Object.keys(req.body);
   console.log(req.body);
-  const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink", "pathakId"];
+  const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink", "teamId"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
@@ -48,7 +48,7 @@ module.exports.delete_event = async (req, res) => {
     if (!event) {
       return res.status(400).json({ success: false, message: "Event not found" });
     }
-    req.pathak.numberOfEvents--;
+    req.team.numberOfEvents--;
     res.status(200).json({ message: "Event deleted successfully", success: true });
   }catch {
     res.status(400).json({ success: false, message: "Error" });

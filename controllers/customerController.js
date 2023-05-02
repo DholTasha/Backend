@@ -2,7 +2,7 @@ const Customer = require("../models/customer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Event = require("../models/event");
-const Pathak = require("../models/team");
+const Team = require("../models/team");
 const crypto = require("crypto");
 const nodeMailer = require("nodemailer");
 
@@ -135,27 +135,27 @@ module.exports.customer_delete = async(req,res) => {
   }
 };
 
-//get all pathaks
-module.exports.get_all_pathak = async(req,res) => {
+//get all teams
+module.exports.get_all_team = async(req,res) => {
   try {
-    const pathaks = await Pathak.find();
-    if (!pathaks) {
-      return res.status(400).json({ success: false, message: "Pathaks not found" });
+    const teams = await Team.find();
+    if (!teams) {
+      return res.status(400).json({ success: false, message: "Teams not found" });
     }
-    res.status(200).json({ pathaks, success: true });
+    res.status(200).json({ teams, success: true });
   }catch {
     res.status(400).json({ success: false, message: "Error" });
   }
 };
 
-//get pathak events
-module.exports.get_pathak_events = async(req,res) => {
-  const pathakId = req.params.pathakId;
-  console.log(req.params.pathakId);
+//get team events
+module.exports.get_team_events = async(req,res) => {
+  const teamId = req.params.teamId;
+  console.log(req.params.teamId);
   try {
-    const events = await Event.find({pathakId});
+    const events = await Event.find({teamId});
     if (!events) {
-      return res.status(400).json({ success: false, message: "Pathak not found" });
+      return res.status(400).json({ success: false, message: "Team not found" });
     }
     res.status(200).json({ events, success: true });
   }catch {
@@ -163,15 +163,15 @@ module.exports.get_pathak_events = async(req,res) => {
   }
 };
 
-//display pathak details
-module.exports.pathak_profile = async(req,res) => {
-  const pathakId = req.params.pathakId;
+//display team details
+module.exports.team_profile = async(req,res) => {
+  const teamId = req.params.teamId;
   try {
-    const pathak = await Pathak.findById(pathakId);
-    if (!pathak) {
-      return res.status(400).json({ success: false, message: "Pathak not found" });
+    const team = await Team.findById(teamId);
+    if (!team) {
+      return res.status(400).json({ success: false, message: "Team not found" });
     }
-    res.status(200).json({ pathak, success: true });
+    res.status(200).json({ team, success: true });
   } catch {
     res.status(400).json({ success: false, message: "Login or Signup" });
   }

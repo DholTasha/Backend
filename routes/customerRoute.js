@@ -34,20 +34,20 @@ router.patch("/customer/me", authCustomer, customerController.customer_update);
 // Testing - Done
 router.delete("/customer/me", authCustomer, customerController.customer_delete);
 
-// get all pathaks
+// get all teams
 // Code - Done
 // Testing - Done
-router.get("/customer/pathak/all", customerController.get_all_pathak);
+router.get("/customer/team/all", customerController.get_all_team);
 
 // company details,
 // Code - Done
 // Testing - Done
-router.get("/customer/pathak/:pathakId", customerController.pathak_profile);
+router.get("/customer/team/:teamId", customerController.team_profile);
 
-// get pathak events
+// get team events
 // Code - Done
 // Testing - Done
-router.get("/customer/pathak/events/:pathakId", authCustomer, customerController.get_pathak_events);
+router.get("/customer/team/events/:teamId", authCustomer, customerController.get_team_events);
 
 // update customer password
 // Code - Incomplete

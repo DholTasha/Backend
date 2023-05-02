@@ -34,10 +34,10 @@ const eventSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        pathakId: {
+        teamId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: "Pathak",
+            ref: "Team",
         },
         // customerId: {
         //     type: mongoose.Schema.Types.ObjectId,
