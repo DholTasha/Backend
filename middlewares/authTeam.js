@@ -1,23 +1,23 @@
 const jwt = require("jsonwebtoken");
-const Pathak = require("../models/pathak");
+const Team = require("../models/team");
 
-const authPathak = async (req, res, next) => {
+const authTeam = async (req, res, next) => {
     const token = req.header('Authorization').replace('Bearer ', '')
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                let AuthError = { error: "Pathak is not authenticated!" };
+                let AuthError = { error: "Team is not authenticated!" };
                 res.status(401).send({ AuthError });
             } else {
-                const pathak = await Pathak.findById(decodedToken._id);
-                req.pathak = pathak;
+                const team = await Team.findById(decodedToken._id);
+                req.team = team;
                 next();
             }
         });
     } else {
-        let AuthError = { error: "Pathak is not authenticated!" };
+        let AuthError = { error: "Team is not authenticated!" };
         res.status(401).send({ AuthError });
     }
 };
 
-module.exports = authPathak;
+module.exports = authTeam;

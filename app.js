@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const customerRouter = require("./routes/customerRoute");
-const pathakRouter = require("./routes/pathakRoute");
+const teamRouter = require("./routes/teamRoute");
 const eventRouter = require("./routes/eventRoute");
 const cors = require("cors");
 const app = express();
@@ -20,5 +20,5 @@ mongoose
     .catch((err) => {console.log(err);});
 
 app.use(customerRouter);
-app.use(pathakRouter);
+app.use(teamRouter);
 app.use(eventRouter);

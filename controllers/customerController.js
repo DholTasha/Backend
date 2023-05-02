@@ -2,7 +2,7 @@ const Customer = require("../models/customer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Event = require("../models/event");
-const Pathak = require("../models/pathak");
+const Pathak = require("../models/team");
 const crypto = require("crypto");
 const nodeMailer = require("nodemailer");
 

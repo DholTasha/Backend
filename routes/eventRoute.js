@@ -1,5 +1,4 @@
 const express = require("express");
-const authPathak = require("../middlewares/authPathak");
 const authEvent = require("../middlewares/authEvent");
 const eventController = require("../controllers/eventController");
 

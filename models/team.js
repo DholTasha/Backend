@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
-const pathakSchema = new mongoose.Schema(
+const teamSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -69,7 +69,7 @@ const pathakSchema = new mongoose.Schema(
     }
 );
 
-pathakSchema.pre("save", async function (next) {
+teamSchema.pre("save", async function (next) {
     if (this.isModified("password")) {
         const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(this.password, salt);
@@ -77,19 +77,19 @@ pathakSchema.pre("save", async function (next) {
     next();
 });
 
-// login pathak
-pathakSchema.statics.login = async function (email, password) {
-    const pathak = await this.findOne({ email });
-    if (pathak) {
-        const auth = await bcrypt.compare(password, pathak.password);
+// login team
+teamSchema.statics.login = async function (email, password) {
+    const team = await this.findOne({ email });
+    if (team) {
+        const auth = await bcrypt.compare(password, team.password);
         if (auth) {
-            return pathak;
+            return team;
         }
         throw Error("Incorrect Password");
     }
     throw Error("Incorrect Email");
 };
 
-const Pathak = mongoose.model("Pathak", pathakSchema);
+const Team = mongoose.model("Team", teamSchema);
 
-module.exports = Pathak;
+module.exports = Team;

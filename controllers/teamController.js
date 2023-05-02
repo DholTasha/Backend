@@ -1,4 +1,4 @@
-const Pathak = require("../models/pathak");
+const Team = require("../models/team");
 const Customer = require("../models/customer");
 const jwt = require("jsonwebtoken");
 const Event = require("../models/event");
@@ -40,39 +40,39 @@ const handleErrors = (err) => {
 const tokenAge = parseInt(process.env.JWT_AGE);
 
 // sign up
-module.exports.signup_pathak = async (req, res) => {
+module.exports.signup_team = async (req, res) => {
   try {
-      const pathak = await Pathak.create(req.body);
-      const token = createToken(pathak._id);
-      res.status(201).json({ pathak, usertype: "pathak", token, success: true });
+      const team = await Team.create(req.body);
+      const token = createToken(team._id);
+      res.status(201).json({ team, usertype: "team", token, success: true });
   } catch (err) {
       const error = handleErrors(err);
       res.status(400).json({ error, success: false });
   }
 };
 
-// login pathak
-module.exports.login_pathak = async (req, res) => {
+// login team
+module.exports.login_team = async (req, res) => {
     const { email, password } = req.body;
     try {
-        let pathak = await Pathak.login(email, password);
-        const token = createToken(pathak._id);
-        pathak = await Pathak.findById(pathak);
-        res.status(200).json({ pathak, usertype: "pathak", token, success: true });
+        let team = await Team.login(email, password);
+        const token = createToken(team._id);
+        team = await Team.findById(team);
+        res.status(200).json({ team, usertype: "team", token, success: true });
     } catch (err) {
         const error = handleErrors(err);
         res.status(400).json({ error, success: false });
     }
 };
 
-// logout pathak
-module.exports.logout_pathak = (req, res) => {
-    req.pathak._id = "";
+// logout team
+module.exports.logout_team = (req, res) => {
+    req.team._id = "";
     res.send({ success: true, message: "Logged Out." });
 };
 
-//Update pathak
-module.exports.pathak_update = async (req, res) => {
+//Update team
+module.exports.team_update = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink", "address", "videoLink", "mobile"];
   const isValidOperation = updates.every((update) =>
@@ -84,42 +84,42 @@ module.exports.pathak_update = async (req, res) => {
   }
 
   try {
-      const pathak = await Pathak.findOne({
-          _id: req.pathak._id,
+      const team = await Team.findOne({
+          _id: req.team._id,
       });
 
-      if (!pathak) {
+      if (!team) {
           return res.status(404).send();
       }
 
-      updates.forEach((update) => (pathak[update] = req.body[update]));
-      await pathak.save();
-      res.send(pathak);
+      updates.forEach((update) => (team[update] = req.body[update]));
+      await team.save();
+      res.send(team);
   } catch (e) {
       res.status(400).send(e);
   }
 };
 
-//get all pathaks
-module.exports.get_all_pathak = async(req,res) => {
+//get all teams
+module.exports.get_all_team = async(req,res) => {
     try {
-      const pathak = await Pathak.find();
-      if (!pathak) {
-        return res.status(400).json({ success: false, message: "Pathak not found" });
+      const team = await Team.find();
+      if (!team) {
+        return res.status(400).json({ success: false, message: "Team not found" });
       }
-      res.status(200).json({ pathak, success: true });
+      res.status(200).json({ team, success: true });
     }catch {
       res.status(400).json({ success: false, message: "Error" });
     }
 };
 
-//get pathak events
-module.exports.get_pathak_events = async(req,res) => {
-  const pathakId = req.pathak._id;
+//get team events
+module.exports.get_team_events = async(req,res) => {
+  const teamId = req.team._id;
   try {
-    const events = await Event.find({pathakId});
+    const events = await Event.find({teamId});
     if (!events) {
-      return res.status(400).json({ success: false, message: "Pathak not found" });
+      return res.status(400).json({ success: false, message: "Team not found" });
     }
     res.status(200).json({ events, success: true });
   }catch {
@@ -127,13 +127,13 @@ module.exports.get_pathak_events = async(req,res) => {
   }
 };
 
-//get other pathak event
-module.exports.get_other_pathak_events = async(req,res) => {
-    const pathakId = req.params.pathakId;
+//get other team event
+module.exports.get_other_team_events = async(req,res) => {
+    const teamId = req.params.teamId;
     try {
-      const events = await Event.find({pathakId});
+      const events = await Event.find({teamId});
       if (!events) {
-        return res.status(400).json({ success: false, message: "Pathak not found" });
+        return res.status(400).json({ success: false, message: "Team not found" });
       }
       res.status(200).json({ events, success: true });
     }catch {
@@ -141,27 +141,27 @@ module.exports.get_other_pathak_events = async(req,res) => {
     }
 };
 
-//display pathak details
-module.exports.pathak_profile = async(req,res) => {
+//display team details
+module.exports.team_profile = async(req,res) => {
   try {
-    const pathak = await Pathak.findById(req.pathak._id);
-    if (!pathak) {
-      return res.status(400).json({ success: false, message: "Pathak not found" });
+    const team = await Team.findById(req.team._id);
+    if (!team) {
+      return res.status(400).json({ success: false, message: "Team not found" });
     }
-    res.status(200).json({ pathak, success: true });
+    res.status(200).json({ team, success: true });
   } catch {
     res.status(400).json({ success: false, message: "Login or Signup" });
   }
 }
 
-// delete pathak
-module.exports.pathak_delete = async(req,res) => {
+// delete team
+module.exports.team_delete = async(req,res) => {
   try {
-    const pathak = await Pathak.findByIdAndDelete(req.pathak._id);
-    if (!pathak) {
-      return res.status(400).json({ success: false, message: "Pathak not found" });
+    const team = await Team.findByIdAndDelete(req.team._id);
+    if (!team) {
+      return res.status(400).json({ success: false, message: "Team not found" });
     }
-    res.status(200).json({ message: "Pathak deleted successfully", success: true });
+    res.status(200).json({ message: "Team deleted successfully", success: true });
   }catch {
     res.status(400).json({ success: false, message: "Error" });
   }
@@ -169,12 +169,12 @@ module.exports.pathak_delete = async(req,res) => {
 
 
 // // upate password
-// module.exports.pathak_update_password = async (req, res) => {
-//     const pathak = await Pathak.findById(req.pathak._id);
+// module.exports.team_update_password = async (req, res) => {
+//     const team = await Team.findById(req.team._id);
 
 //     const isPasswordMatched = await bcrypt.compare(
 //         req.body.oldPassword,
-//         pathak.password
+//         team.password
 //     );
 
 //     if (!isPasswordMatched) {
@@ -183,36 +183,36 @@ module.exports.pathak_delete = async(req,res) => {
 
 //     // frontend compare newpassword with confirm password
 
-//     pathak.password = req.body.newPassword;
+//     team.password = req.body.newPassword;
 
-//     await pathak.save();
+//     await team.save();
 
 //     res.status(200).json({ success: true, message: "Password Updated." });
 // };
 
-// // pathak reset Password
-// module.exports.pathak_reset_password = async (req, res) => {
+// // team reset Password
+// module.exports.team_reset_password = async (req, res) => {
 //     //passing in query not in params
 //     // console.log('query', req.query);
 
-//     const pathak = await Pathak.findOne({ _id: req.query.id });
+//     const team = await Team.findOne({ _id: req.query.id });
 //     const isValid = await bcrypt.compare(
 //         req.query.token,
-//         pathak.resetPasswordToken
+//         team.resetPasswordToken
 //     );
 
 //     if (!isValid) {
 //         return res.send("Reset password token is invalid or has been expired", 400);
 //     }
 
-//     pathak.password = req.body.newPassword;
-//     pathak.resetPasswordToken = undefined;
-//     pathak.resetPasswordExpire = undefined;
+//     team.password = req.body.newPassword;
+//     team.resetPasswordToken = undefined;
+//     team.resetPasswordExpire = undefined;
 
-//     await pathak.save();
+//     await team.save();
 
 //     //JWT_SECRET is a string -> parse it to integer
-//     const token = jwt.sign({ id: pathak._id }, process.env.JWT_SECRET, {
+//     const token = jwt.sign({ id: team._id }, process.env.JWT_SECRET, {
 //         expiresIn: parseInt(process.env.UPDATE_PASSWORD_AGE) * 1000,
 //     });
 
@@ -226,17 +226,17 @@ module.exports.pathak_delete = async(req,res) => {
 
 //     res.status(200).cookie("token", token, options).json({
 //         success: true,
-//         pathak,
+//         team,
 //         token,
 //     });
 // };
 
-// // pathak forgot Password
-// module.exports.pathak_forgot_password = async (req, res) => {
-//     const pathak = await Pathak.findOne({ email: req.body.email });
+// // team forgot Password
+// module.exports.team_forgot_password = async (req, res) => {
+//     const team = await Team.findOne({ email: req.body.email });
 
-//     if (!pathak) {
-//         return res.status(404).send("pathak not found");
+//     if (!team) {
+//         return res.status(404).send("team not found");
 //     }
 
 //     // generating token
@@ -247,16 +247,16 @@ module.exports.pathak_delete = async(req,res) => {
 
 //     const resetPasswordToken = await bcrypt.hash(resetToken, salt);
 
-//     //storing HASHED password in pathak db, not token
-//     pathak.resetPasswordToken = resetPasswordToken;
+//     //storing HASHED password in team db, not token
+//     team.resetPasswordToken = resetPasswordToken;
 
-//     pathak.resetPasswordExpire = Date.now() + 15 * 60 * 1000; //15 minutes from now
+//     team.resetPasswordExpire = Date.now() + 15 * 60 * 1000; //15 minutes from now
 
-//     await pathak.save({ validateBeforeSave: false });
+//     await team.save({ validateBeforeSave: false });
 //     // console.log("resetToken", resetToken);
 //     // now send email
 //     // const resetPasswordUrl = `${req.protocol}://${req.get("host")}/resetPassword?token=${resetToken}&id=${user._id}`;
-//     const resetPasswordUrl = `http://localhost:3000/pathak/password/reset/${resetToken}/${pathak.id}`;
+//     const resetPasswordUrl = `http://localhost:3000/team/password/reset/${resetToken}/${team.id}`;
 
 //     const message = `Your reset password token is:- \n\n <a href=${resetPasswordUrl}>click here</a> \n\n If you have not reque
 //   sted please ignore this mail`;
@@ -273,8 +273,8 @@ module.exports.pathak_delete = async(req,res) => {
 //         let info = await transporter.sendMail(
 //             {
 //                 from: process.env.SMTP_SERVICE,
-//                 to: pathak.email,
-//                 subject: "Password Recovery checking Pathak",
+//                 to: team.email,
+//                 subject: "Password Recovery checking Team",
 //                 // text: message,
 //                 html: message,
 //             },
@@ -289,18 +289,18 @@ module.exports.pathak_delete = async(req,res) => {
 //                 // 250 Requested mail action okay, completed
 //                 res.status(250).json({
 //                     success: true,
-//                     message: `Email send to ${pathak.email} successfully`,
+//                     message: `Email send to ${team.email} successfully`,
 //                 });
 //             }
 //         );
 
-//         // res.status(200).json({success: true,message: `Email send to ${pathak.email} successfully`,});
+//         // res.status(200).json({success: true,message: `Email send to ${team.email} successfully`,});
 
 //         // console.log("Message sent: %s", info.messageId);
 //     } catch (error) {
-//         pathak.resetPasswordToken = undefined;
-//         pathak.resetPasswordToken = undefined;
-//         await pathak.save({ validateBeforeSave: false });
+//         team.resetPasswordToken = undefined;
+//         team.resetPasswordToken = undefined;
+//         await team.save({ validateBeforeSave: false });
 
 //         // console.log(error);
 //     }
