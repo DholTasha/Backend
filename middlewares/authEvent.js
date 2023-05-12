@@ -11,7 +11,7 @@ const authTeam = async (req, res, next) => {
             } else {
                 const team = await Team.findById(decodedToken._id);
                 req.team = team;
-                req.event = req.body;
+                req.event = {...req.body};
                 req.event.teamId = team._id;
                 next();
             }
