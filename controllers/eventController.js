@@ -15,7 +15,7 @@ module.exports.add_event = async (req, res) => {
 module.exports.update_event = async (req, res) => {
   const updates = Object.keys(req.body);
   console.log(req.body);
-  const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink", "teamId"];
+  const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
