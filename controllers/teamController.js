@@ -74,7 +74,7 @@ module.exports.logout_team = (req, res) => {
 //Update team
 module.exports.team_update = async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ["name", "location", "maleDhol", "femaleDhol", "maleTasha", "femaleTasha", "videoLink", "address", "videoLink", "mobile"];
+  const allowedUpdates = ["name", "email", "maleDhol", "maleTasha", "femaleDhol", "femaleTasha", "address", "videoLink", "mobile"];
   const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
   );
