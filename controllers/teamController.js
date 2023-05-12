@@ -127,6 +127,20 @@ module.exports.get_team_events = async(req,res) => {
   }
 };
 
+//get other team profile
+module.exports.get_other_team_profile = async(req,res) => {
+  const teamId = req.params.teamId;
+  try {
+    const team = await Team.findById(teamId);
+    if (!team) {
+      return res.status(400).json({ success: false, message: "Team not found" });
+    }
+    res.status(200).json({ team, success: true });
+  } catch {
+    res.status(400).json({ success: false, message: "Login or Signup" });
+  }
+};
+
 //get other team event
 module.exports.get_other_team_events = async(req,res) => {
     const teamId = req.params.teamId;

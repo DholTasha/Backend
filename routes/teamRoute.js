@@ -44,6 +44,11 @@ router.get("/team/events/all", authTeam, teamController.get_team_events);
 // Testing - Done
 router.get("/team/all", teamController.get_all_team);
 
+// get other team profile
+// Code - Done
+// Testing - Done
+router.get("/team/profile/:teamId", authTeam, teamController.get_other_team_profile);
+
 // get other team events
 // Code - Done
 // Testing - Done
