@@ -22,10 +22,10 @@ const customerSchema = new mongoose.Schema({
       type: Number,
       required: true,
   },
-  numberOfEvents: {
-    type: Number,
-    default: 0
-  },
+  // numberOfEvents: {
+  //   type: Number,
+  //   default: 0
+  // },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     resetPasswordTokenForForgotPassword: String,

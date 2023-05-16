@@ -56,10 +56,10 @@ const teamSchema = new mongoose.Schema(
             required: true,
         },
 
-        numberOfEvents: {
-            type: Number,
-            default: 0
-        },
+        // numberOfEvents: {
+        //     type: Number,
+        //     default: 0
+        // },
 
         //new fields :
         resetPasswordToken: String,
